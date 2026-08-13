@@ -3,7 +3,7 @@
 	"package": "com.skinchanger.client.mixin",
 	"compatibilityLevel": "JAVA_25",
 	"client": [
-		"ExampleClientMixin"
+		"PlayerSkinMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
