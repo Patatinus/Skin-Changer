@@ -1,0 +1,38 @@
+{
+	"schemaVersion": 1,
+	"id": "skin-changer",
+	"version": "${version}",
+	"name": "skin-changer",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/skin-changer/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.skinchanger.SkinChanger"
+		],
+		"client": [
+			"com.skinchanger.client.SkinChangerClient"
+		]
+	},
+	"mixins": [
+		"skin-changer.mixins.json",
+		{
+			"config": "skin-changer.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.19.3",
+		"minecraft": "~26.2",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
