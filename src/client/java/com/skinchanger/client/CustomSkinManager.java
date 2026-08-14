@@ -23,6 +23,7 @@ public class CustomSkinManager {
 
     // The dynamic Identifier that points to the currently active custom skin
     private Identifier currentActiveSkinId = null;
+    private String currentActiveSkinName = null;
 
     private CustomSkinManager() {
         // Find the .minecraft folder and append /custom_skins
@@ -68,6 +69,7 @@ public class CustomSkinManager {
                 }
 
                 this.currentActiveSkinId = newSkinId;
+                this.currentActiveSkinName = fileName;
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -89,5 +91,9 @@ public class CustomSkinManager {
             e.printStackTrace();
         }
         return skins;
+    }
+
+    public String getCurrentActiveSkinName() {
+        return this.currentActiveSkinName;
     }
 }
