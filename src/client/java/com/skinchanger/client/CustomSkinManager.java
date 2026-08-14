@@ -24,6 +24,7 @@ public class CustomSkinManager {
     // The dynamic Identifier that points to the currently active custom skin
     private Identifier currentActiveSkinId = null;
     private String currentActiveSkinName = null;
+    private boolean useSlimModel = false;
 
     private CustomSkinManager() {
         // Find the .minecraft folder and append /custom_skins
@@ -95,5 +96,25 @@ public class CustomSkinManager {
 
     public String getCurrentActiveSkinName() {
         return this.currentActiveSkinName;
+    }
+
+    public void clearSkin() {
+        Minecraft.getInstance().execute(() -> {
+            // Delete the texture from the GPU to prevent memory leaks
+            if (this.currentActiveSkinId != null) {
+                Minecraft.getInstance().getTextureManager().release(this.currentActiveSkinId);
+                this.currentActiveSkinId = null;
+            }
+            // Set our tracker to a special string so the GUI knows what to highlight
+            this.currentActiveSkinName = "Default Skin";
+        });
+    }
+
+    public void setUseSlimModel(boolean slim) {
+        this.useSlimModel = slim;
+    }
+
+    public boolean isUsingSlimModel() {
+        return this.useSlimModel;
     }
 }
