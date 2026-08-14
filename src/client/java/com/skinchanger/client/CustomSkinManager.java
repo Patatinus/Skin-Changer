@@ -153,4 +153,8 @@ public class CustomSkinManager {
     public boolean isUsingSlimModel() {
         return this.useSlimModel;
     }
+
+    public Path getSkinsFolder() {
+        return skinsFolder;
+    }
 }

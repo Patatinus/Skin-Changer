@@ -139,4 +139,8 @@ public class CustomCapeManager {
             this.currentActiveCapeName = "Default Cape";
         });
     }
+
+    public Path getCapesFolder() {
+        return capesFolder;
+    }
 }

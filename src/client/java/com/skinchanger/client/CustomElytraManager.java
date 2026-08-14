@@ -144,5 +144,9 @@ public class CustomElytraManager {
     public boolean shouldForceCapeElytra() {
         return this.forceCapeElytra;
     }
+
+    public Path getElytrasFolder() {
+        return elytrasFolder;
+    }
 }
 

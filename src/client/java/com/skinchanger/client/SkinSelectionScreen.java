@@ -15,6 +15,8 @@ public class SkinSelectionScreen extends Screen {
     private CustomScrollList capeList;
     private CustomScrollList elytraList;
 
+    private double lastDropMouseX = 0;
+
     public SkinSelectionScreen() {
         super(Component.literal("Customizer"));
     }
@@ -253,6 +255,60 @@ public class SkinSelectionScreen extends Screen {
 
         }
 
+    }
+
+    @Override
+    public void onFilesDrop(java.util.List<java.nio.file.Path> paths) {
+        boolean addedNewFile = false;
+
+        // 1. Ask the raw Window Manager for the exact mouse position
+        net.minecraft.client.Minecraft mc = this.minecraft;
+        double rawMouseX = mc.mouseHandler.xpos(); // Raw monitor pixels
+
+        // 2. Convert monitor pixels into Minecraft GUI pixels
+        double guiMouseX = rawMouseX * (double) mc.getWindow().getGuiScaledWidth() / (double) mc.getWindow().getScreenWidth();
+
+        for (java.nio.file.Path droppedFile : paths) {
+            // Only accept .png files!
+            if (droppedFile.toString().toLowerCase().endsWith(".png")) {
+                try {
+                    java.nio.file.Path targetDirectory;
+
+                    // Use the newly calculated, perfectly accurate GUI mouse X!
+                    if (guiMouseX < this.width / 3.0) {
+                        targetDirectory = CustomSkinManager.INSTANCE.getSkinsFolder();
+                    } else if (guiMouseX < this.width * 2.0 / 3.0) {
+                        targetDirectory = CustomCapeManager.INSTANCE.getCapesFolder();
+                    } else {
+                        targetDirectory = CustomElytraManager.INSTANCE.getElytrasFolder();
+                    }
+
+                    // Build destination and copy the file
+                    java.nio.file.Path targetFile = targetDirectory.resolve(droppedFile.getFileName());
+                    java.nio.file.Files.copy(
+                            droppedFile,
+                            targetFile,
+                            java.nio.file.StandardCopyOption.REPLACE_EXISTING
+                    );
+
+                    addedNewFile = true;
+
+                } catch (Exception e) {
+                    System.err.println("Failed to copy dropped file: " + e.getMessage());
+                }
+            }
+        }
+
+        // Refresh the GUI to show the new files instantly
+        if (addedNewFile) {
+            this.rebuildWidgets();
+        }
+    }
+
+    @Override
+    public void mouseMoved(double mouseX, double mouseY) {
+        this.lastDropMouseX = mouseX;
+        super.mouseMoved(mouseX, mouseY);
     }
 
     public enum IconType {
