@@ -112,15 +112,17 @@ public class SkinSelectionScreen extends Screen {
             CustomElytraManager.INSTANCE.clearElytra();
         });
 
-
-
-        this.elytraList.addFile("Custom Cape's Elytra", null, null, () -> {
+        CustomScrollList.FileEntry cCapesElytraEntry = this.elytraList.addFile("Custom Cape's Elytra", null, null, () -> {
             CustomElytraManager.INSTANCE.setForceCapeElytra(true);
+            CustomElytraManager.INSTANCE.setCurrentActiveElytraName("Custom Cape's Elytra");
         });
 
         if ("Default Elytra".equals(activeElytra)) {
             this.elytraList.setSelected(defaultElytraEntry);
+        } else if ("Custom Cape's Elytra".equals(activeElytra)) {
+            this.elytraList.setSelected(cCapesElytraEntry); // This highlights it!
         }
+
         for (String elytra : CustomElytraManager.INSTANCE.getAvailableElytras()) {
 
             Identifier previewId = CustomElytraManager.INSTANCE.getPreviewId(elytra);
@@ -309,6 +311,14 @@ public class SkinSelectionScreen extends Screen {
     public void mouseMoved(double mouseX, double mouseY) {
         this.lastDropMouseX = mouseX;
         super.mouseMoved(mouseX, mouseY);
+    }
+
+    @Override
+    public void onClose() {
+        // Save all choices the exact moment the player exits the menu!
+        SkinChangerConfig.save();
+
+        super.onClose(); // Let the game actually close the menu
     }
 
     public enum IconType {

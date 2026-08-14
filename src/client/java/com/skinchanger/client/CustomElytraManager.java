@@ -148,5 +148,8 @@ public class CustomElytraManager {
     public Path getElytrasFolder() {
         return elytrasFolder;
     }
+    public void setCurrentActiveElytraName(String name) {
+        currentActiveElytraName = name;
+    }
 }
 

@@ -12,6 +12,8 @@ public class SkinChangerClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 
+		SkinChangerConfig.load();
+
 		KeyMapping.Category skinCategory = KeyMapping.Category.register(
 				Identifier.fromNamespaceAndPath("skin-changer", "category")
 		);
