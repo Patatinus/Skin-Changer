@@ -16,7 +16,7 @@ The usage is very simple.
 5. Press 'V'. If it doesn't work, check `Controls -> Key Binds` in settings to see which button it is.
 6. A menu will pop up, and now you can see the skins, capes and elytras you have put in previously. It will be only `Default`s if you didn't add any before.
 7. Drag and drop the png you want to the correct box. For example a skin png to the skin box. It won't break anything if you drop it in a wrong box, but a skin's png won't look good on a cape.
-- Quick note on elytra textures, they are pulled from cape pngs. So if you want to use cape A's elytra with cape B, you need to drag cape A's png into the elytra box to use it.
+- Quick note on elytra textures, they are pulled from capes' pngs. So if you want to use cape A's elytra with cape B, you need to drag cape A's png into the elytra box to use it.
 8. Click on the files you want to use, there is a small preview on left to the each file's name.
 9. Press `Escape` to leave the menu and you are all set.
 
@@ -24,7 +24,7 @@ The usage is very simple.
 
 You might be wondering why would anyone use a mod like this. Since Minecraft already let's you change your skin really easily it might seem pointless. So here are some usage cases I can think of,
 
-1. You want to use a custom cape for free. This mod lets you do just that, you can put in any cape png you want and you will see it on your back.
+1. You want to use a custom cape for free. This mod lets you do just that, you can put in any cape's png you want and you will see it on your back.
 2. You don't like the texture of your elytra. You can change your elytra's texture with this mod, and it won't affect your existing cape at all.
 3. You want to change between skins without leaving the game. Due to how this mod was made, you can change your skin in game without any lag or waiting. _Note that it is only a client-side change_
 4. You have a skin you really want to use, but you don't want internet (NameMC) to archive it. Since this mod is client-side, you can use whatever skin you want and nobody else will know.
@@ -50,6 +50,7 @@ These are the possible reasons I managed to come up with.
 ![Example01](https://github.com/Patatinus/Skin-Changer/blob/main/media/skin-changer-example-01.png)
 ![Example01](https://github.com/Patatinus/Skin-Changer/blob/main/media/skin-changer-example-02.png)
 ![Example01](https://github.com/Patatinus/Skin-Changer/blob/main/media/skin-changer-example-03.png)
+![Example01](https://github.com/Patatinus/Skin-Changer/blob/main/media/skin-changer-example-04.gif)
 
 
 ## License
