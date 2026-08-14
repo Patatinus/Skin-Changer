@@ -7,6 +7,7 @@ import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 
 public class SkinSelectionScreen extends Screen {
 
@@ -40,7 +41,7 @@ public class SkinSelectionScreen extends Screen {
         if (activeSkin == null) activeSkin = "Default Skin";
 
         // 1. ADD THE DEFAULT OPTION FIRST
-        CustomScrollList.FileEntry defaultSkinEntry = this.skinList.addFile("Default Skin", () -> {
+        CustomScrollList.FileEntry defaultSkinEntry = this.skinList.addFile("Default Skin", null, null ,() -> {
             CustomSkinManager.INSTANCE.clearSkin(); // Run our new clear method!
         });
 
@@ -51,9 +52,15 @@ public class SkinSelectionScreen extends Screen {
 
         for (String skin : CustomSkinManager.INSTANCE.getAvailableSkins()) {
 
-            CustomScrollList.FileEntry entry = this.skinList.addFile(skin, () -> {
+            Identifier previewId = CustomSkinManager.INSTANCE.getPreviewId(skin);
+
+            CustomScrollList.FileEntry entry = this.skinList.addFile(skin, previewId, IconType.SKIN, () -> {
                 CustomSkinManager.INSTANCE.loadAndSetSkin(skin);
             });
+
+            if (skin.equals(activeSkin)) {
+                this.skinList.setSelected(entry);
+            }
             if (skin.equals(CustomSkinManager.INSTANCE.getCurrentActiveSkinName())) {
                 this.skinList.setSelected(entry);
             }
@@ -69,7 +76,7 @@ public class SkinSelectionScreen extends Screen {
         if (activeCape == null) activeCape = "Default Cape";
 
         // 1. ADD THE DEFAULT OPTION FIRST
-        CustomScrollList.FileEntry defaultCapeEntry = this.capeList.addFile("Default Cape", () -> {
+        CustomScrollList.FileEntry defaultCapeEntry = this.capeList.addFile("Default Cape", null, null,() -> {
             CustomCapeManager.INSTANCE.clearCape(); // Run our new clear method!
         });
 
@@ -78,7 +85,9 @@ public class SkinSelectionScreen extends Screen {
         }
         for (String cape : CustomCapeManager.INSTANCE.getAvailableCapes()) {
 
-            CustomScrollList.FileEntry entry = this.capeList.addFile(cape, () -> {
+            Identifier previewId = CustomCapeManager.INSTANCE.getPreviewId(cape);
+
+            CustomScrollList.FileEntry entry = this.capeList.addFile(cape, previewId, IconType.CAPE, () -> {
                 CustomCapeManager.INSTANCE.loadAndSetCape(cape);
             });
             if (cape.equals(CustomCapeManager.INSTANCE.getCurrentActiveCapeName())) {
@@ -96,12 +105,14 @@ public class SkinSelectionScreen extends Screen {
         // Fallback in case it is null on the first launch
         if (activeElytra == null) activeElytra = "Default Elytra";
 
-        CustomScrollList.FileEntry defaultElytraEntry = this.elytraList.addFile("Default Elytra", () -> {
+        CustomScrollList.FileEntry defaultElytraEntry = this.elytraList.addFile("Default Elytra", null, null, () -> {
             CustomElytraManager.INSTANCE.setForceCapeElytra(false);
             CustomElytraManager.INSTANCE.clearElytra();
         });
 
-        this.elytraList.addFile("Custom Cape's Elytra", () -> {
+
+
+        this.elytraList.addFile("Custom Cape's Elytra", null, null, () -> {
             CustomElytraManager.INSTANCE.setForceCapeElytra(true);
         });
 
@@ -110,7 +121,9 @@ public class SkinSelectionScreen extends Screen {
         }
         for (String elytra : CustomElytraManager.INSTANCE.getAvailableElytras()) {
 
-            CustomScrollList.FileEntry entry = this.elytraList.addFile(elytra, () -> {
+            Identifier previewId = CustomElytraManager.INSTANCE.getPreviewId(elytra);
+
+            CustomScrollList.FileEntry entry = this.elytraList.addFile(elytra, previewId, IconType.ELYTRA, () -> {
                 CustomElytraManager.INSTANCE.loadAndSetElytra(elytra);
                 CustomElytraManager.INSTANCE.setForceCapeElytra(false);
             });
@@ -160,6 +173,12 @@ public class SkinSelectionScreen extends Screen {
             super(minecraft, width, height, y, itemHeight);
         }
 
+        public FileEntry addFile(String fileName, Identifier previewId, IconType iconType, Runnable onClick) {
+            FileEntry newEntry = this.new FileEntry(fileName, previewId, iconType, onClick);
+            super.addEntry(newEntry);
+            return newEntry;
+        }
+
         @Override
         protected int scrollBarX() {
             // this.getX() gets the starting position of the column, then we add the width!
@@ -172,32 +191,51 @@ public class SkinSelectionScreen extends Screen {
         }
 
         // We expose this so we can add buttons to the list from the init() method
-        public FileEntry addFile(String fileName, Runnable onClick) {
-            FileEntry newEntry = this.new FileEntry(fileName, onClick);
-            super.addEntry(newEntry);
-            return newEntry;
-        }
-
-        // Represents a single row inside the scrollable list
         public class FileEntry extends ObjectSelectionList.Entry<FileEntry> {
             private final String fileName;
+            private final Identifier previewId;
+            private final IconType iconType; // Track what type of file this is!
             private final Runnable onClick;
 
-            public FileEntry(String fileName, Runnable onClick) {
+            public FileEntry(String fileName, Identifier previewId, IconType iconType, Runnable onClick) {
                 this.fileName = fileName;
+                this.previewId = previewId;
+                this.iconType = iconType;
                 this.onClick = onClick;
             }
 
             @Override
-            public void extractContent(GuiGraphicsExtractor graphics, int top, int left, boolean isHovered, float partialTick) {
-                graphics.text(
-                        SkinSelectionScreen.this.font,
-                        this.fileName,
-                        this.getX() + 5,
-                        this.getY() + 4,
-                        -1,
-                        false
-                );
+            public void extractContent(GuiGraphicsExtractor graphics, int mouseX, int mouseY, boolean isHovered, float partialTick) {
+                int textOffset = 5;
+
+                if (this.previewId != null) {
+                    switch (this.iconType) {
+                        case SKIN -> {
+                            // Draw Skin Face (16x16 Dest, 8x8 Src, 64x64 Tex)
+                            graphics.blit(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, this.previewId,
+                                    this.getX() + 2, this.getY() + 2, 8.0F, 8.0F, 16, 16, 8, 8, 64, 64);
+                            // Draw Hat Layer
+                            graphics.blit(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, this.previewId,
+                                    this.getX() + 2, this.getY() + 2, 40.0F, 8.0F, 16, 16, 8, 8, 64, 64);
+                            textOffset = 22;
+                        }
+                        case CAPE -> {
+                            // Draw Cape Back (10x16 Dest, 10x16 Src, 64x32 Tex)
+                            graphics.blit(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, this.previewId,
+                                    this.getX() + 5, this.getY() + 4, 1.0F, 1.0F, 10, 16, 10, 16, 64, 32);
+                            textOffset = 20;
+                        }
+                        case ELYTRA -> {
+                            // Draw Elytra Left Wing (10x20 Dest, 10x20 Src, 64x32 Tex)
+                            graphics.blit(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, this.previewId,
+                                    this.getX() + 5, this.getY() + 2, 36.0F, 2.0F, 10, 20, 10, 20, 64, 32);
+                            textOffset = 20;
+                        }
+                    }
+                }
+
+                // Draw the text, dynamically shifted over to make room for whichever icon we just drew
+                graphics.text(SkinSelectionScreen.this.font, this.fileName, this.getX() + textOffset, this.getY() + 6, -1, false);
             }
 
             @Override
@@ -213,9 +251,13 @@ public class SkinSelectionScreen extends Screen {
                 return Component.literal(this.fileName);
             }
 
-
-
-
         }
+
+    }
+
+    public enum IconType {
+        SKIN, CAPE, ELYTRA
     }
 }
+
+

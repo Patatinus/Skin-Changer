@@ -11,7 +11,9 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CustomElytraManager {
 
@@ -21,7 +23,8 @@ public class CustomElytraManager {
 
     private Identifier currentActiveElytraId = null;
     private String currentActiveElytraName = null;
-    private boolean forceCapeElytra = true;
+    private boolean forceCapeElytra = false;
+    private final Map<String, Identifier> previewCache = new HashMap<>();
 
     private CustomElytraManager() {
         this.elytrasFolder = FabricLoader.getInstance().getGameDir().resolve("custom_elytras");
@@ -100,6 +103,38 @@ public class CustomElytraManager {
             // Set our tracker to a special string so the GUI knows what to highlight
             this.currentActiveElytraName = "Default Elytra";
         });
+    }
+
+    public Identifier getPreviewId(String fileName) {
+        // 1. If we already loaded this skin's preview, just return the cached ID!
+        if (this.previewCache.containsKey(fileName)) {
+            return this.previewCache.get(fileName);
+        }
+
+        // 2. Generate a permanent, safe ID for this specific file
+        // Identifiers only allow lowercase letters, numbers, and underscores
+        // Inside CustomCapeManager's getPreviewId method:
+        String safeName = fileName.toLowerCase().replace(".png", "").replaceAll("[^a-z0-9_.-]", "");
+        Identifier previewId = Identifier.fromNamespaceAndPath("skin-changer", "preview_cape_" + safeName);
+
+        Path elytraFile = elytrasFolder.resolve(fileName);
+
+        try (InputStream inputStream = new FileInputStream(elytraFile.toFile())) {
+            NativeImage nativeImage = NativeImage.read(inputStream);
+
+            // Your exact DynamicTexture logic
+            DynamicTexture dynamicTexture = new DynamicTexture(() -> "custom_elytra_preview", nativeImage);
+            Minecraft.getInstance().getTextureManager().register(previewId, dynamicTexture);
+
+            // 4. Save it to the cache so we never have to read this file again!
+            this.previewCache.put(fileName, previewId);
+
+            return previewId;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null; // Return null if the file is broken or missing
+        }
     }
 
     public void setForceCapeElytra(boolean force) {

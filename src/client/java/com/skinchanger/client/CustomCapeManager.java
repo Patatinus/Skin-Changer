@@ -11,7 +11,9 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CustomCapeManager {
 
@@ -24,6 +26,7 @@ public class CustomCapeManager {
     // The dynamic Identifier that points to the currently active custom cape
     private Identifier currentActiveCapeId = null;
     private String currentActiveCapeName = null;
+    private final Map<String, Identifier> previewCache = new HashMap<>();
 
     private CustomCapeManager() {
         // Find the .minecraft folder and append /custom_capes
@@ -87,6 +90,38 @@ public class CustomCapeManager {
             e.printStackTrace();
         }
         return capes;
+    }
+
+    public Identifier getPreviewId(String fileName) {
+
+        if (this.previewCache.containsKey(fileName)) {
+            return this.previewCache.get(fileName);
+        }
+
+        // 2. Generate a permanent, safe ID for this specific file
+        // Identifiers only allow lowercase letters, numbers, and underscores
+        String safeName = fileName.toLowerCase().replace(".png", "").replaceAll("[^a-z0-9_.-]", "");
+        Identifier previewId = Identifier.fromNamespaceAndPath("skin-changer", "preview_cape_" + safeName);
+
+        // 3. Load the texture onto the GPU
+        Path capeFile = capesFolder.resolve(fileName);
+
+        try (InputStream inputStream = new FileInputStream(capeFile.toFile())) {
+            NativeImage nativeImage = NativeImage.read(inputStream);
+
+            // Your exact DynamicTexture logic
+            DynamicTexture dynamicTexture = new DynamicTexture(() -> "custom_cape_preview", nativeImage);
+            Minecraft.getInstance().getTextureManager().register(previewId, dynamicTexture);
+
+            // 4. Save it to the cache so we never have to read this file again!
+            this.previewCache.put(fileName, previewId);
+
+            return previewId;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null; // Return null if the file is broken or missing
+        }
     }
 
     public String getCurrentActiveCapeName() {
