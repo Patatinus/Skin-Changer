@@ -3,9 +3,6 @@ package com.skinchanger.client;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.skinchanger.client.CustomCapeManager;
-import com.skinchanger.client.CustomElytraManager;
-import com.skinchanger.client.CustomSkinManager;
 import net.minecraft.client.Minecraft;
 
 import java.io.Reader;
@@ -41,8 +38,7 @@ public class SkinChangerConfig {
                 GSON.toJson(json, writer);
             }
         } catch (Exception e) {
-            System.err.println("Failed to save Skin Changer config!");
-            e.printStackTrace();
+            SkinChangerClient.LOGGER.error("Failed to save Skin Changer config!", e);
         }
     }
 
@@ -99,8 +95,7 @@ public class SkinChangerConfig {
                 }
             }
         } catch (Exception e) {
-            System.err.println("Failed to load Skin Changer config!");
-            e.printStackTrace();
+            SkinChangerClient.LOGGER.error("Failed to load Skin Changer config!", e);
         }
     }
 }

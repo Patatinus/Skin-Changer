@@ -39,7 +39,7 @@ public class CustomSkinManager {
                 Files.createDirectories(skinsFolder);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            SkinChangerClient.LOGGER.error("Encountered an error!", e);
         }
     }
 
@@ -51,7 +51,8 @@ public class CustomSkinManager {
         Path skinFile = skinsFolder.resolve(fileName);
 
         if (!Files.exists(skinFile)) {
-            System.out.println("Skin file not found: " + skinFile);
+            String message = "Skin file not found: " + skinFile;
+            SkinChangerClient.LOGGER.info(message);
             return;
         }
 
@@ -76,7 +77,7 @@ public class CustomSkinManager {
                 this.currentActiveSkinName = fileName;
 
             } catch (Exception e) {
-                e.printStackTrace();
+                SkinChangerClient.LOGGER.error("Encountered an error!", e);
             }
         });
     }
@@ -92,7 +93,7 @@ public class CustomSkinManager {
                     .filter(path -> path.toString().endsWith(".png"))
                     .forEach(path -> skins.add(path.getFileName().toString()));
         } catch (Exception e) {
-            e.printStackTrace();
+            SkinChangerClient.LOGGER.error("Encountered an error!", e);
         }
         return skins;
     }
@@ -141,7 +142,7 @@ public class CustomSkinManager {
             return previewId;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            SkinChangerClient.LOGGER.error("Encountered an error!", e);
             return null; // Return null if the file is broken or missing
         }
     }

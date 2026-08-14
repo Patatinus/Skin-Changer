@@ -296,7 +296,8 @@ public class SkinSelectionScreen extends Screen {
                     addedNewFile = true;
 
                 } catch (Exception e) {
-                    System.err.println("Failed to copy dropped file: " + e.getMessage());
+                    String message = "Failed to copy dropped file: " + e.getMessage();
+                    SkinChangerClient.LOGGER.error(message, e);
                 }
             }
         }

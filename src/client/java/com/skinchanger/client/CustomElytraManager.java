@@ -35,7 +35,7 @@ public class CustomElytraManager {
                 Files.createDirectories(elytrasFolder);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            SkinChangerClient.LOGGER.error("Encountered an error!", e);
         }
     }
 
@@ -43,7 +43,8 @@ public class CustomElytraManager {
         Path elytraFile = elytrasFolder.resolve(fileName);
 
         if (!Files.exists(elytraFile)) {
-            System.out.println("Elytra file not found: " + elytraFile);
+            String message = "Elytra file not found: " + elytraFile;
+            SkinChangerClient.LOGGER.info(message);
             return;
         }
 
@@ -68,7 +69,7 @@ public class CustomElytraManager {
                 this.currentActiveElytraName = fileName;
 
             } catch (Exception e) {
-                e.printStackTrace();
+                SkinChangerClient.LOGGER.error("Encountered an error!", e);
             }
         });
     }
@@ -84,7 +85,7 @@ public class CustomElytraManager {
                     .filter(path -> path.toString().endsWith(".png"))
                     .forEach(path -> elytras.add(path.getFileName().toString()));
         } catch (Exception e) {
-            e.printStackTrace();
+            SkinChangerClient.LOGGER.error("Encountered an error!", e);
         }
         return elytras;
     }
@@ -132,7 +133,7 @@ public class CustomElytraManager {
             return previewId;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            SkinChangerClient.LOGGER.error("Encountered an error!", e);
             return null; // Return null if the file is broken or missing
         }
     }

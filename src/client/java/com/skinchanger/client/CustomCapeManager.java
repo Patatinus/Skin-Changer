@@ -38,7 +38,7 @@ public class CustomCapeManager {
                 Files.createDirectories(capesFolder);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            SkinChangerClient.LOGGER.error("Encountered an error!", e);
         }
     }
 
@@ -46,7 +46,8 @@ public class CustomCapeManager {
         Path capeFile = capesFolder.resolve(fileName);
 
         if (!Files.exists(capeFile)) {
-            System.out.println("Cape file not found: " + capeFile);
+            String message = "Cape file not found: " + capeFile;
+            SkinChangerClient.LOGGER.info(message);
             return;
         }
 
@@ -71,7 +72,7 @@ public class CustomCapeManager {
                 this.currentActiveCapeName = fileName;
 
             } catch (Exception e) {
-                e.printStackTrace();
+                SkinChangerClient.LOGGER.error("Encountered an error!", e);
             }
         });
     }
@@ -87,7 +88,7 @@ public class CustomCapeManager {
                     .filter(path -> path.toString().endsWith(".png"))
                     .forEach(path -> capes.add(path.getFileName().toString()));
         } catch (Exception e) {
-            e.printStackTrace();
+            SkinChangerClient.LOGGER.error("Encountered an error!", e);
         }
         return capes;
     }
@@ -119,7 +120,7 @@ public class CustomCapeManager {
             return previewId;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            SkinChangerClient.LOGGER.error("Encountered an error!", e);
             return null; // Return null if the file is broken or missing
         }
     }

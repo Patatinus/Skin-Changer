@@ -8,7 +8,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.Identifier;
 import org.lwjgl.glfw.GLFW;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class SkinChangerClient implements ClientModInitializer {
+
+	public static final Logger LOGGER = LoggerFactory.getLogger("skin-changer");
 	@Override
 	public void onInitializeClient() {
 
