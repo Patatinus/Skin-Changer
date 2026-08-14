@@ -2,14 +2,13 @@
 	"schemaVersion": 1,
 	"id": "skin-changer",
 	"version": "${version}",
-	"name": "skin-changer",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "pats-skin-changer",
+	"description": "Change your skin, cape and elytra to whatever you want them to be!",
 	"authors": [
-		"Me!"
+		"Patatinus"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/Patatinus/Skin-Changer"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/skin-changer/icon.png",

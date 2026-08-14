@@ -24,7 +24,7 @@ public class SkinChangerClient implements ClientModInitializer {
 		);
 
 		KeyMapping openGuiKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
-				"Open Skin Menu",
+				"key.skin-changer.open_menu",
 				GLFW.GLFW_KEY_V,  // The default key
 				skinCategory
 		));
