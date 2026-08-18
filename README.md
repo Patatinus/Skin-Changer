@@ -34,7 +34,7 @@ You might be wondering why would anyone use a mod like this. Since Minecraft alr
 
 These are the possible reasons I managed to come up with.
 
-## Releavent Information
+## Relevant Information
 - .png files are saved in `.minecraft/custom-skins`, `.minecraft/custom-capes` and `.minecraft/custom-elytras`. `.minecraft` being wherever the instance of your game is.
 - You can actually use any .png for all of these, they won't fit well or at all if they aren't formatted correctly. But you won't get an error.
 - The mod is only client-side, because that is very easy to make. Maybe I will make a plugin or a mod to make it server-side as well. Though that will bring moderation issues with it.
