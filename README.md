@@ -55,6 +55,7 @@ These are the possible reasons I managed to come up with.
 
 ## License
 Pat's Skin Changer - A Minecraft mod for easily changing your current appearance
+
 Copyright (C) 2026 Sunitatap
 
 This program is free software: you can redistribute it and/or modify
